@@ -19,7 +19,5 @@ public class DockerUtilsTest {
         docker.startContainerInBackground("example");
         docker.diffOnContainer("example");
         docker.stop("example");
-
-
     }
 }
