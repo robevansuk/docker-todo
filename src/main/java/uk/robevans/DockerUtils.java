@@ -96,4 +96,8 @@ public class DockerUtils {
             throw ex;
         }
     }
+
+    public void stop(String containerId) throws IOException {
+        getDockerStatusAfterCommand("docker stop " + containerId);
+    }
 }
