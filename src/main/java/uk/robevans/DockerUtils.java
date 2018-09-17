@@ -56,22 +56,20 @@ public class DockerUtils {
         return "";
     }
 
-    public void tag(String containerId, String appName) throws IOException {
-        getResponseFromCommand("docker tag " + containerId + " " + appName);
+    public void tag(String containerId, String containerName) throws IOException {
+        getResponseFromCommand("docker tag " + containerId + " " + containerName);
     }
 
     /**
-     * this starts the app then shuts it down when an interrupt signal is received (ctrl+c)
-     * @param containerName
-     * @param appName
-     * @throws IOException
+     * this starts the app using the tagged Id using a container name
+     * then shuts it down when an interrupt signal is received (ctrl+c)
      */
-    public void run(String containerName, String appName) throws IOException {
-        getDockerStatusAfterCommand("docker run -p 8000:8000 --name " + containerName + " " + appName);
+    public void run(String containerName, String tagId) throws IOException {
+        getDockerStatusAfterCommand("docker run -p 8000:8000 --name " + containerName + " " + tagId);
     }
 
-    public void startContainerInBackground(String containerId) throws IOException {
-        getDockerStatusAfterCommand("docker start " + containerId);
+    public void startContainerInBackground(String containerName) throws IOException {
+        getDockerStatusAfterCommand("docker start " + containerName);
 
     }
 
@@ -79,6 +77,15 @@ public class DockerUtils {
         return getResponseFromCommand("docker ps -a");
     }
 
+    /**
+     * docker uses copy on write (copy changes only to new file per container)
+     * Because of this, the docker diff command allows us to see exactly whats changed
+     * from the base version of the container (as defined in the Dockerfile) vs the
+     * currently running version of the container. A - added, C - changed.
+     */
+    public String stateOfContainer(String containerId) throws IOException {
+        return getResponseFromCommand("docker diff");
+    }
 
     private Process exec(String command) throws IOException {
         try {

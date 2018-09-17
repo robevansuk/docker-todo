@@ -15,6 +15,9 @@ public class DockerUtilsTest {
     public void testStartContainerInBackground() throws IOException, InterruptedException {
         String containerId = docker.buildDockerfile();
         docker.tag(containerId, "todoapp");
-        docker.startContainerInBackground("example1");
+        docker.run("example" , "todoapp");
+        docker.startContainerInBackground("example");
+
+
     }
 }
