@@ -83,8 +83,8 @@ public class DockerUtils {
      * from the base version of the container (as defined in the Dockerfile) vs the
      * currently running version of the container. A - added, C - changed.
      */
-    public String stateOfContainer(String containerId) throws IOException {
-        return getResponseFromCommand("docker diff");
+    public String diffOnContainer(String containerId) throws IOException {
+        return getResponseFromCommand("docker diff " + containerId);
     }
 
     private Process exec(String command) throws IOException {
@@ -97,6 +97,9 @@ public class DockerUtils {
         }
     }
 
+    /**
+     * stops the containerId from running
+     */
     public void stop(String containerId) throws IOException {
         getDockerStatusAfterCommand("docker stop " + containerId);
     }

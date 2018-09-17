@@ -17,6 +17,7 @@ public class DockerUtilsTest {
         docker.tag(containerId, "todoapp");
         docker.run("example" , "todoapp");
         docker.startContainerInBackground("example");
+        docker.diffOnContainer("example");
         docker.stop("example");
 
 
