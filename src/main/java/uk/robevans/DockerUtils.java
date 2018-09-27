@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -102,5 +104,37 @@ public class DockerUtils {
      */
     public void stop(String containerId) throws IOException {
         getDockerStatusAfterCommand("docker stop " + containerId);
+    }
+
+    public String getContainerIpAddresses() {
+        String[] activeDockerContainers = getActiveDockerContainers();
+        List<String> ipAddresses = new ArrayList<>();
+        for (String containerId : activeDockerContainers) {
+            String ipAddress = getIpAddress(containerId);
+            log.info("Container ID Addresses: " +  ipAddress);
+        }
+
+        return ipAddresses.toString();
+    }
+
+    private String getIpAddress(String id) {
+        try{
+            return getResponseFromCommand("docker inspect " + id + " --format '{{.NetworkSettings.IPAddress}}'");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String[] getActiveDockerContainers() {
+        String containers = null;
+        try {
+            containers = getResponseFromCommand("docker ps -q");
+            log.info(containers);
+            return containers.split("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new String[] {""};
+        }
     }
 }
