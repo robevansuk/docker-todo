@@ -137,4 +137,27 @@ public class DockerUtils {
             return new String[] {""};
         }
     }
+
+    /**
+     * This will destroy all containers
+     */
+    public String deleteAllContainers() throws IOException {
+        return getResponseFromCommand("docker ps -aq | xargs --no-run-if-empty docker rm -f");
+    }
+
+    /**
+     * This method will remove docker Containers from your machine
+     * that are currently not in use
+     */
+    public String removeUnusedExitedContainers() throws IOException {
+        return getResponseFromCommand("docker ps -aq --filter status=exited | xargs docker image rm -f");
+    }
+
+    /**
+     * This method will remove docker images from your machine
+     * that are currently not in use
+     */
+    public String removeDanglingUnusedImages() throws IOException {
+        return getResponseFromCommand("docker images -q --filter dangling=true | xargs docker image rm -f");
+    }
 }
